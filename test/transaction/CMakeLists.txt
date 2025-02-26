@@ -1,0 +1,1 @@
+add_kuzu_test(current_time_test current_time_test.cpp)
