@@ -256,6 +256,7 @@ oC_Statement
         | kU_ImportDatabase
         | kU_AttachDatabase
         | kU_DetachDatabase
+        | kU_FaceStatement
         | kU_UseDatabase;
 
 kU_CopyFrom
@@ -293,6 +294,10 @@ kU_Options
 
 kU_DetachDatabase
     : DETACH SP oC_SchemaName;
+
+// 新增FACE语句规则
+kU_FaceStatement
+    : FACE SP oC_SchemaName ;
 
 kU_UseDatabase
     : USE SP oC_SchemaName;

@@ -50,8 +50,15 @@ int main() {
     kuzu_destroy_string(result_string);
 
     kuzu_query_result_destroy(&result);
+
+    kuzu_connection_query(&conn, "FACE test;", &result);
+    char* result_string2 = kuzu_query_result_to_string(&result);
+    printf("%s", result_string2);
+    kuzu_destroy_string(result_string2);
+    kuzu_query_result_destroy(&result);
+
     kuzu_connection_destroy(&conn);
     kuzu_database_destroy(&db);
-    printf("test success\n");
+    printf("\ntest end\n");
     return 0;
 }

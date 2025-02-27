@@ -39,6 +39,10 @@ std::vector<std::shared_ptr<Statement>> Parser::parseQuery(std::string_view quer
     cypherLexer.addErrorListener(&parserErrorListener);
     auto tokens = CommonTokenStream(&cypherLexer);
     tokens.fill();
+    printf("tokens size: %d\n", tokens.getTokens().size());
+    for (auto token : tokens.getTokens()) {
+        printf("token: %s\n", token->getText().c_str());
+    }
 
     auto kuzuCypherParser = KuzuCypherParser(&tokens);
     kuzuCypherParser.removeErrorListeners();

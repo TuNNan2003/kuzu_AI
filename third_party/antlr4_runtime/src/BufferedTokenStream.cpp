@@ -98,7 +98,6 @@ size_t BufferedTokenStream::fetch(size_t n) {
     if (is<WritableToken *>(t.get())) {
       (static_cast<WritableToken *>(t.get()))->setTokenIndex(_tokens.size());
     }
-
     _tokens.push_back(std::move(t));
     ++i;
 
