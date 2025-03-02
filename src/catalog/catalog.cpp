@@ -548,6 +548,7 @@ void Catalog::registerBuiltInFunctions() {
     auto functionCollection = function::FunctionCollection::getFunctions();
     for (auto i = 0u; functionCollection[i].name != nullptr; ++i) {
         auto& f = functionCollection[i];
+        printf("catalog:registerBuiltInFunctions:551\t f.name: %s\n", f.name);
         auto functionSet = f.getFunctionSetFunc();
         functions->createEntry(&DUMMY_TRANSACTION,
             std::make_unique<FunctionCatalogEntry>(f.catalogEntryType, f.name,

@@ -30,6 +30,7 @@
 #include "processor/operator/persistent/reader/npy/npy_reader.h"
 #include "processor/operator/persistent/reader/parquet/parquet_reader.h"
 #include "processor/operator/table_scan/ftable_scan_function.h"
+#include "function/Intelligence/intelligence_function.h"
 
 using namespace kuzu::processor;
 
@@ -102,6 +103,10 @@ FunctionCollection* FunctionCollection::getFunctions() {
         SCALAR_FUNCTION(ArrayValueFunction), SCALAR_FUNCTION(ArrayCrossProductFunction),
         SCALAR_FUNCTION(ArrayCosineSimilarityFunction), SCALAR_FUNCTION(ArrayDistanceFunction),
         SCALAR_FUNCTION(ArrayInnerProductFunction), SCALAR_FUNCTION(ArrayDotProductFunction),
+
+        // Intelligence functions
+        SCALAR_FUNCTION(LocationDetectionFunction),
+        SCALAR_FUNCTION(CalculateFunction),
 
         // List functions
         SCALAR_FUNCTION(ListCreationFunction), SCALAR_FUNCTION(ListRangeFunction),

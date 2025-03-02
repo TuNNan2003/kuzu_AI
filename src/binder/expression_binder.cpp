@@ -22,6 +22,7 @@ namespace binder {
 
 std::shared_ptr<Expression> ExpressionBinder::bindExpression(
     const parser::ParsedExpression& parsedExpression) {
+    printf("expression_binder:bindExpression:25\t parsedExpression: %s\n", parsedExpression.toString().c_str());
     // Normally u can only reference an existing expression through alias which is a parsed
     // VARIABLE expression.
     // An exception is order by binding, e.g. RETURN a, COUNT(*) ORDER BY COUNT(*)
@@ -79,9 +80,12 @@ std::shared_ptr<Expression> ExpressionBinder::bindExpression(
         throw NotImplementedException(
             "bindExpression(" + ExpressionTypeUtil::toString(expressionType) + ").");
     }
+    printf("expression_binder:bindExpression:82\t expression: %s\n", expression->toString().c_str());
     if (ConstantExpressionVisitor::needFold(*expression)) {
+        printf("expression_binder:bindExpression:84\t foldExpression\n");
         return foldExpression(expression);
     }
+    printf("expression_binder:bindExpression:87\t expression end\n");
     return expression;
 }
 

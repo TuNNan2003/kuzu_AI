@@ -49,9 +49,10 @@ std::vector<std::shared_ptr<Statement>> Parser::parseQuery(std::string_view quer
     kuzuCypherParser.addErrorListener(&parserErrorListener);
     kuzuCypherParser.setErrorHandler(std::make_shared<ParserErrorStrategy>());
 
-    printf("kuzu Cypher Parser end\n");
+    printf("kuzu Cypher Parser start\n");
 
     Transformer transformer(*kuzuCypherParser.ku_Statements());
+    printf("kuzu Cypher Parser end\n");
     return transformer.transform();
 }
 

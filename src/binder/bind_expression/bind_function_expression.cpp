@@ -24,7 +24,12 @@ namespace binder {
 std::shared_ptr<Expression> ExpressionBinder::bindFunctionExpression(const ParsedExpression& expr) {
     auto funcExpr = expr.constPtrCast<ParsedFunctionExpression>();
     auto functionName = funcExpr->getNormalizedFunctionName();
+    printf("bind_function_expression:bindFunctionExpression:27\t functionName: %s, childrenNum: %d\n", functionName.c_str(), expr.getNumChildren());
+    for(int i = 0; i < expr.getNumChildren(); i++) {
+        printf("bind_function_expression:bindFunctionExpression:29\t child %d: %s\n", i, expr.getChild(i)->toString().c_str());
+    }
     auto entry = context->getCatalog()->getFunctionEntry(context->getTransaction(), functionName);
+    printf("bind_function_expression:bindFunctionExpression:32\t  entry: %s\t entry_type: %s\n", entry->getName().c_str(), CatalogEntryTypeUtils::toString(entry->getType()).c_str());
     switch (entry->getType()) {
     case CatalogEntryType::SCALAR_FUNCTION_ENTRY:
         return bindScalarFunctionExpression(expr, functionName);
@@ -43,12 +48,16 @@ std::shared_ptr<Expression> ExpressionBinder::bindFunctionExpression(const Parse
 
 std::shared_ptr<Expression> ExpressionBinder::bindScalarFunctionExpression(
     const ParsedExpression& parsedExpression, const std::string& functionName) {
+    printf("bind_function_expression:bindScalarFunctionExpression:51\t entry, numChildren: %d\n", parsedExpression.getNumChildren());
     expression_vector children;
     for (auto i = 0u; i < parsedExpression.getNumChildren(); ++i) {
+        printf("bind_function_expression:bindScalarFunctionExpression:54\t i:%d\n", i);
         auto expr = bindExpression(*parsedExpression.getChild(i));
+        printf("bind_function_expression:bindScalarFunctionExpression:56\t i: %d, expr: %s\n", i, expr->toString().c_str());
         if (parsedExpression.getChild(i)->hasAlias()) {
             expr->setAlias(parsedExpression.getChild(i)->getAlias());
         }
+        printf("bind_function_expression:bindScalarFunctionExpression:59\t i: %d, expr end\n", i);
         children.push_back(expr);
     }
     return bindScalarFunctionExpression(children, functionName,
@@ -66,6 +75,10 @@ static std::vector<LogicalType> getTypes(const expression_vector& exprs) {
 std::shared_ptr<Expression> ExpressionBinder::bindScalarFunctionExpression(
     const expression_vector& children, const std::string& functionName,
     std::vector<std::string> optionalArguments) {
+    printf("bind_function_expression:bindScalarFunctionExpression:78\t entry bindScalarFunctionExpressionWithArguments\n");
+    for (auto argument : optionalArguments) {
+        printf("bind_function_expression:bindScalarFunctionExpression:80\t argument: %s\n", argument.c_str());
+    }
     auto catalog = context->getCatalog();
     auto transaction = context->getTransaction();
     auto childrenTypes = getTypes(children);
@@ -76,6 +89,11 @@ std::shared_ptr<Expression> ExpressionBinder::bindScalarFunctionExpression(
         entry->ptrCast<FunctionCatalogEntry>())
                         ->ptrCast<ScalarFunction>()
                         ->copy();
+    printf("bind_function_expression:bindScalarFunctionExpression:92\t function Judge\n");
+    if (!function) {
+        printf("bind_function_expression:bindScalarFunctionExpression:94\t nullptr\n");
+        throw BinderException("Function "+functionName+" not implemented");
+    }
     if (children.size() == 2 && children[1]->expressionType == ExpressionType::LAMBDA) {
         if (!function->isListLambda) {
             throw BinderException(stringFormat("{} does not support lambda input.", functionName));
@@ -121,6 +139,7 @@ std::shared_ptr<Expression> ExpressionBinder::bindScalarFunctionExpression(
     }
     auto uniqueExpressionName =
         ScalarFunctionExpression::getUniqueName(function->name, childrenAfterCast);
+    printf("bind_function_expression:bindScalarFunctionExpression:142\t uniqueExpressionName: %s\n", uniqueExpressionName.c_str());
     return std::make_shared<ScalarFunctionExpression>(ExpressionType::FUNCTION, std::move(function),
         std::move(bindData), std::move(childrenAfterCast), uniqueExpressionName);
 }

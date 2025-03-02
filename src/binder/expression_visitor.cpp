@@ -256,6 +256,8 @@ bool ConstantExpressionVisitor::needFold(const Expression& expr) {
 }
 
 bool ConstantExpressionVisitor::isConstant(const Expression& expr) {
+    printf("expression_visitor:isConstant:259\t entry isConstant\n");
+    printf("expression_visitor:isConstant:260\t expressionType: %s\n", ExpressionTypeUtil::toString(expr.expressionType).c_str());
     switch (expr.expressionType) {
     case ExpressionType::LITERAL:
         return true;
@@ -270,6 +272,7 @@ bool ConstantExpressionVisitor::isConstant(const Expression& expr) {
     case ExpressionType::LAMBDA:
         return false;
     case ExpressionType::FUNCTION:
+        printf("expression_visitor:isConstant:275\t visitFunction\n");
         return visitFunction(expr);
     case ExpressionType::CASE_ELSE:
         return visitCase(expr);

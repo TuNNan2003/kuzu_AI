@@ -27,6 +27,7 @@ int main() {
     // Fetch each value.
     kuzu_flat_tuple tuple;
     kuzu_value value;
+    printf("test 1\n");
     while (kuzu_query_result_has_next(&result)) {
         kuzu_query_result_get_next(&result, &tuple);
 
@@ -43,18 +44,35 @@ int main() {
     }
     kuzu_value_destroy(&value);
     kuzu_flat_tuple_destroy(&tuple);
+    kuzu_connection_query(&conn, "MATCH (a:Person) RETURN a.name AS NAME, CALCULATE(a.name) AS NAME_UPPER",&result);
 
-    // Print query result.
-    char* result_string = kuzu_query_result_to_string(&result);
-    printf("%s", result_string);
-    kuzu_destroy_string(result_string);
+    printf("test 2\n");
+    while (kuzu_query_result_has_next(&result)) {
+        kuzu_query_result_get_next(&result, &tuple);
 
-    kuzu_query_result_destroy(&result);
+        kuzu_flat_tuple_get_value(&tuple, 0, &value);
+        char* name;
+        kuzu_value_get_string(&value, &name);
 
-    kuzu_connection_query(&conn, "FACE test;", &result);
-    char* result_string2 = kuzu_query_result_to_string(&result);
-    printf("%s", result_string2);
-    kuzu_destroy_string(result_string2);
+        kuzu_flat_tuple_get_value(&tuple, 1, &value);
+        int64_t age;
+        kuzu_value_get_int64(&value, &age);
+
+        kuzu_flat_tuple_get_value(&tuple, 2, &value);
+        char* nameUpper;
+        kuzu_value_get_string(&value, &nameUpper);
+
+        printf("nameUpper: %s, name: %s, age: %" PRIi64 " \n",nameUpper, name, age);
+        kuzu_destroy_string(name);
+    }
+    kuzu_value_destroy(&value);
+    kuzu_flat_tuple_destroy(&tuple);
+
+    // // Print query result.
+    // char* result_string = kuzu_query_result_to_string(&result);
+    // printf("%s", result_string);
+    // kuzu_destroy_string(result_string);
+
     kuzu_query_result_destroy(&result);
 
     kuzu_connection_destroy(&conn);
