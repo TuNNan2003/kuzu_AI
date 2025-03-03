@@ -6,11 +6,8 @@ namespace kuzu {
 namespace function {
 
 struct Calculate {
-    static inline void operation(common::ku_string_t& input, common::ku_string_t& result,
-        common::ValueVector& resultValueVector) {
-        printf("calculate:operation:11\t input: %s\n", input.getAsString().c_str());
-        result.set("abcdefghijkl");
-    }
+    static void operation(common::ku_string_t& input, common::ku_string_t& result,
+        common::ValueVector& resultValueVector);
 };
 
 } // namespace function

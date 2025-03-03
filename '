@@ -1,0 +1,27 @@
+feat: 实现调用自定义函数，待接入AI接口进行调用
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch feature/tunanzhao_dev_ai
+# Your branch is ahead of 'origin/feature/tunanzhao_dev_ai' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   examples/c/main.c
+#	new file:   examples/c/run.sh
+#	modified:   install/bin/kuzu
+#	modified:   install/lib/libkuzu.a
+#	modified:   install/lib/libkuzu.dylib
+#	modified:   src/binder/bind_expression/bind_function_expression.cpp
+#	modified:   src/binder/expression_binder.cpp
+#	modified:   src/binder/expression_visitor.cpp
+#	modified:   src/catalog/catalog.cpp
+#	modified:   src/function/function_collection.cpp
+#	new file:   src/function/intelligence/calculate_function.cpp
+#	new file:   src/include/function/Intelligence/functions/calculate_function.h
+#	new file:   src/include/function/Intelligence/functions/locate.h
+#	new file:   src/include/function/Intelligence/intelligence_function.h
+#	modified:   src/parser/parser.cpp
+#
