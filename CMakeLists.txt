@@ -199,6 +199,7 @@ if(${BUILD_WASM})
     add_link_options(-fexceptions)
     add_compile_definitions(__WASM__)
 endif()
+add_link_options(-lcurl)
 
 if(CMAKE_ANDROID_NDK_VERSION)
     message(STATUS "Android NDK version: ${CMAKE_ANDROID_NDK_VERSION}")

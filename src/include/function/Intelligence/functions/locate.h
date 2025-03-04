@@ -7,9 +7,9 @@ namespace function {
 
 struct LocationDetection {
     static inline void operation(common::ku_string_t& input, common::ku_string_t& result,
-        common::ValueVector& resultValueVector) {
-        printf("locate:operation:11\t input: %s\n", input.getAsString().c_str());
-    }
+        common::ValueVector& resultValueVector);
+    private:
+    static AIRequester aiRequester;
 };
 
 } // namespace function

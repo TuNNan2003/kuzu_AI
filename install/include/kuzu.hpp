@@ -1130,6 +1130,7 @@ struct KUZU_API ku_string_t {
         this->len = length;
         memcpy(prefix, value, PREFIX_LENGTH);
         memcpy(reinterpret_cast<char*>(overflowPtr), value, length);
+        printf("setLongString: %s\n", value);
     }
     void setShortString(const ku_string_t& value) {
         this->len = value.len;

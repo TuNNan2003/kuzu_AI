@@ -1,3 +1,6 @@
+find_package(CURL REQUIRED)
+find_package(nlohmann_json 3.2.0 REQUIRED)
+
 add_subdirectory(aggregate)
 add_subdirectory(arithmetic)
 add_subdirectory(array)
@@ -39,7 +42,19 @@ add_library(kuzu_function
         vector_timestamp_functions.cpp
         vector_blob_functions.cpp
         vector_uuid_functions.cpp
-        intelligence/calculate_function.cpp)
+        intelligence/calculate_function.cpp
+        Intelligence/executor/ai_requester.cpp)
+
+target_include_directories(kuzu_function PRIVATE
+    ${CURL_INCLUDE_DIRS}
+    ${nlohmann_json_INCLUDE_DIRS}
+)
+
+target_link_libraries(kuzu_function PRIVATE 
+    kuzu_common 
+    ${CURL_LIBRARIES}
+    nlohmann_json::nlohmann_json
+)
 
 set(ALL_OBJECT_FILES
         ${ALL_OBJECT_FILES} $<TARGET_OBJECTS:kuzu_function>
