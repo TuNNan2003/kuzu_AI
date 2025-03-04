@@ -13,16 +13,16 @@ int main() {
     // Create schema.
     kuzu_query_result result;
     kuzu_connection_query(
-        &conn, "CREATE NODE TABLE Person(name STRING, age INT64, PRIMARY KEY(name));", &result);
+        &conn, "CREATE NODE TABLE Person(name STRING, expression STRING, PRIMARY KEY(name));", &result);
     kuzu_query_result_destroy(&result);
     // Create nodes.
-    kuzu_connection_query(&conn, "CREATE (:Person {name: 'Alice', age: 25});", &result);
+    kuzu_connection_query(&conn, "CREATE (:Person {name: '哈尔滨工业大学', expression: '根号3加根号2保留小数点后两位'});", &result);
     kuzu_query_result_destroy(&result);
-    kuzu_connection_query(&conn, "CREATE (:Person {name: 'Bob', age: 30});", &result);
+    kuzu_connection_query(&conn, "CREATE (:Person {name: 'UC berkeley', expression: 'f(x)=ln(x)在x=2处的导数'});", &result);
     kuzu_query_result_destroy(&result);
 
     // Execute a simple query.
-    kuzu_connection_query(&conn, "MATCH (a:Person) RETURN a.name AS NAME, a.age AS AGE;", &result);
+    kuzu_connection_query(&conn, "MATCH (a:Person) RETURN a.name AS NAME, a.expression AS EXPRESSION;", &result);
 
     // Fetch each value.
     kuzu_flat_tuple tuple;
@@ -44,26 +44,27 @@ int main() {
     }
     kuzu_value_destroy(&value);
     kuzu_flat_tuple_destroy(&tuple);
-    kuzu_connection_query(&conn, "MATCH (a:Person) RETURN a.name AS NAME, CALCULATE(a.name) AS NAME_UPPER",&result);
+    kuzu_connection_query(&conn, "MATCH (a:Person) RETURN LOCATE(a.name) AS LOCATION, CALCULATE(a.expression) AS RESULT",&result);
 
     printf("test 2\n");
     while (kuzu_query_result_has_next(&result)) {
         kuzu_query_result_get_next(&result, &tuple);
 
         kuzu_flat_tuple_get_value(&tuple, 0, &value);
-        char* name;
-        kuzu_value_get_string(&value, &name);
+        char* location;
+        kuzu_value_get_string(&value, &location);
+
+        // kuzu_flat_tuple_get_value(&tuple, 1, &value);
+        // int64_t result;
+        // kuzu_value_get_int64(&value, &result);
 
         kuzu_flat_tuple_get_value(&tuple, 1, &value);
-        int64_t age;
-        kuzu_value_get_int64(&value, &age);
+        char* result;
+        kuzu_value_get_string(&value, &result);
 
-        kuzu_flat_tuple_get_value(&tuple, 2, &value);
-        char* nameUpper;
-        kuzu_value_get_string(&value, &nameUpper);
-
-        printf("nameUpper: %s, name: %s, age: %" PRIi64 " \n",nameUpper, name, age);
-        kuzu_destroy_string(name);
+        printf("location: %s, result: %s\n",location, result);
+        kuzu_destroy_string(location);
+        kuzu_destroy_string(result);
     }
     kuzu_value_destroy(&value);
     kuzu_flat_tuple_destroy(&tuple);
